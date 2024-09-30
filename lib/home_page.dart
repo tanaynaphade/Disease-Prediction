@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:new_app/plants_screen.dart';
-import 'package:new_app/test.dart';
-
+import 'Crop_List.dart';
 import 'Welcome.dart';
 import 'animal_screen.dart';
 
@@ -63,12 +62,12 @@ class HomeScreen extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Icon(Icons.dangerous_outlined, color: Colors.red),
-              title: Text('Test', style: TextStyle(color: Colors.green)),
+              leading: Icon(Icons.monetization_on_outlined, color: Colors.green),
+              title: Text('Prices', style: TextStyle(color: Colors.green)),
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Test()),
+                  MaterialPageRoute(builder: (context) => CommodityListPage()),
                 );
               },
             ),

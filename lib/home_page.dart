@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:new_app/news_page.dart';
 import 'package:new_app/plants_screen.dart';
 
 import 'Crop_List.dart';
@@ -84,6 +85,17 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => CommodityListPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading:
+              Icon(Icons.article_outlined, color: Colors.green),
+              title: Text('News', style: TextStyle(color: Colors.green)),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewsPage()),
                 );
               },
             ),

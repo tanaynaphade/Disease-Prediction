@@ -14,7 +14,7 @@ class LineGraphPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('$commodity Prices')),
       body: StreamBuilder<DatabaseEvent>(
-        stream: dbRef.onValue,  // Listen to continuous updates
+        stream: dbRef.onValue,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -57,6 +57,7 @@ class LineGraphPage extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: LineChart(
                 LineChartData(
+                  minY: 2000,
                   titlesData: FlTitlesData(
                     show: true,
                     bottomTitles: AxisTitles(
@@ -64,7 +65,8 @@ class LineGraphPage extends StatelessWidget {
                         showTitles: true,
                         getTitlesWidget: (value, meta) {
                           int index = value.toInt();
-                          if (index >= 0 && index < dates.length) {
+                          // Show every 5th label to avoid overlap
+                          if (index % 5 == 0 && index >= 0 && index < dates.length) {
                             DateTime date = DateFormat('dd MMM yyyy').parse(dates[index]);
                             return Text(
                               DateFormat('dd/MM').format(date),
@@ -74,11 +76,25 @@ class LineGraphPage extends StatelessWidget {
                           return const Text('');
                         },
                         reservedSize: 40,
-                        interval: 1,
+                        interval: 1, // Show all labels, but we control what gets displayed
                       ),
                     ),
                     leftTitles: AxisTitles(
-                      sideTitles: SideTitles(showTitles: true),
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          // Ensure labels don't overlap by showing fewer labels on the Y-axis
+                          if (value % 50 == 0) {
+                            return Text(
+                              value.toInt().toString(),
+                              style: const TextStyle(fontSize: 10),
+                            );
+                          }
+                          return const Text('');
+                        },
+                        reservedSize: 40,
+                        interval: 50, // Show every 50 units on the Y-axis
+                      ),
                     ),
                   ),
                   gridData: FlGridData(show: true),
@@ -89,11 +105,15 @@ class LineGraphPage extends StatelessWidget {
                       isCurved: true,
                       color: Colors.blue,
                       barWidth: 4,
-                      belowBarData: BarAreaData(show: true, color: Colors.lightBlue.withOpacity(0.2)),
+                      belowBarData: BarAreaData(
+                        show: true,
+                        color: Colors.lightBlue.withOpacity(0.2),
+                      ),
                       dotData: FlDotData(show: true),
                     ),
                   ],
                 ),
+                duration: const Duration(milliseconds: 250),
               ),
             );
           }
